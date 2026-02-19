@@ -8,13 +8,25 @@
  * @module
  */
 
+import type * as badges from "../badges.js";
+import type * as habitLogs from "../habitLogs.js";
+import type * as habits from "../habits.js";
+import type * as seed from "../seed.js";
+import type * as users from "../users.js";
+
 import type {
   ApiFromModules,
   FilterApi,
   FunctionReference,
 } from "convex/server";
 
-declare const fullApi: ApiFromModules<{}>;
+declare const fullApi: ApiFromModules<{
+  badges: typeof badges;
+  habitLogs: typeof habitLogs;
+  habits: typeof habits;
+  seed: typeof seed;
+  users: typeof users;
+}>;
 
 /**
  * A utility for referencing Convex functions in your app's public API.
