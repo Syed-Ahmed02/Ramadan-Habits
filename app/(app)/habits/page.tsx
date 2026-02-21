@@ -16,10 +16,50 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { Id } from "@/convex/_generated/dataModel";
+
+// Curated list of common icons for habit creation
+const ICON_OPTIONS = [
+  { value: "Star", label: "Star" },
+  { value: "Sun", label: "Sun" },
+  { value: "Moon", label: "Moon" },
+  { value: "Sunrise", label: "Sunrise" },
+  { value: "Sunset", label: "Sunset" },
+  { value: "Heart", label: "Heart" },
+  { value: "BookOpen", label: "Book" },
+  { value: "BookOpenCheck", label: "Book (Check)" },
+  { value: "Brain", label: "Brain" },
+  { value: "Headphones", label: "Headphones" },
+  { value: "HandHeart", label: "Helping Hand" },
+  { value: "HandHelping", label: "Hand Helping" },
+  { value: "Utensils", label: "Utensils" },
+  { value: "Coffee", label: "Coffee" },
+  { value: "Clock", label: "Clock" },
+  { value: "Timer", label: "Timer" },
+  { value: "Target", label: "Target" },
+  { value: "Trophy", label: "Trophy" },
+  { value: "Flame", label: "Flame" },
+  { value: "Sparkles", label: "Sparkles" },
+  { value: "Smile", label: "Smile" },
+  { value: "Users", label: "Users" },
+  { value: "ShieldCheck", label: "Shield Check" },
+  { value: "CircleDollarSign", label: "Dollar Sign" },
+  { value: "Footprints", label: "Footprints" },
+  { value: "Pen", label: "Pen" },
+  { value: "Dumbbell", label: "Dumbbell" },
+  { value: "Leaf", label: "Leaf" },
+  { value: "Zap", label: "Zap" },
+] as const;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getIcon(iconName: string | undefined): React.ComponentType<any> | null {
@@ -299,11 +339,15 @@ function HabitForm({
     icon: string;
   };
 }) {
+  const [selectedIcon, setSelectedIcon] = useState(defaultValues?.icon ?? "Star");
+
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        onSubmit(new FormData(e.currentTarget));
+        const formData = new FormData(e.currentTarget);
+        formData.set("icon", selectedIcon);
+        onSubmit(formData);
       }}
       className="space-y-4"
     >
@@ -359,13 +403,37 @@ function HabitForm({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="icon">Icon Name</Label>
-          <Input
-            id="icon"
-            name="icon"
-            placeholder="e.g., Star"
-            defaultValue={defaultValues?.icon}
-          />
+          <Label>Icon</Label>
+          <Select
+            defaultValue={selectedIcon}
+            onValueChange={(val) => setSelectedIcon(val as string)}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue>
+                {(value: string) => {
+                  const Icon = getIcon(value);
+                  const option = ICON_OPTIONS.find((o) => o.value === value);
+                  return (
+                    <>
+                      {Icon && <Icon className="h-4 w-4" />}
+                      {option?.label ?? value}
+                    </>
+                  );
+                }}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              {ICON_OPTIONS.map((opt) => {
+                const Icon = getIcon(opt.value);
+                return (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    {Icon && <Icon className="h-4 w-4" />}
+                    {opt.label}
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
