@@ -37,6 +37,35 @@ export function DailyChecklist({ onAllCompleted, onHabitToggle }: DailyChecklist
   const [recentlyCompleted, setRecentlyCompleted] = useState<Set<string>>(new Set());
   const prevCompletedCount = useRef(0);
 
+  const completedIds = new Set(
+    logs?.filter((l) => l.completed).map((l) => l.habitId) ?? []
+  );
+
+  const handleToggle = useCallback(async (habitId: Id<"habits">) => {
+    const wasCompleted = completedIds.has(habitId);
+
+    // Show XP popup for newly completed habits
+    if (!wasCompleted) {
+      setRecentlyCompleted((prev) => new Set(prev).add(habitId));
+      setTimeout(() => {
+        setRecentlyCompleted((prev) => {
+          const next = new Set(prev);
+          next.delete(habitId);
+          return next;
+        });
+      }, 800);
+    }
+
+    const result = await toggleHabit({ habitId, date: today });
+    onHabitToggle?.(result.completed, result.xpChange);
+
+    // Check streak after completion
+    if (result.completed) {
+      await checkStreak({ date: today });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [toggleHabit, checkStreak, today, onHabitToggle, logs]);
+
   if (!habits || !logs) {
     return (
       <div className="space-y-3">
@@ -60,10 +89,6 @@ export function DailyChecklist({ onAllCompleted, onHabitToggle }: DailyChecklist
     {} as Record<HabitCategory, typeof habits>
   );
 
-  const completedIds = new Set(
-    logs.filter((l) => l.completed).map((l) => l.habitId)
-  );
-
   // Check if all are completed now
   const allCompleted = completedIds.size >= habits.length && habits.length > 0;
 
@@ -73,32 +98,6 @@ export function DailyChecklist({ onAllCompleted, onHabitToggle }: DailyChecklist
     setTimeout(() => onAllCompleted?.(), 0);
   }
   prevCompletedCount.current = completedIds.size;
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const handleToggle = useCallback(async (habitId: Id<"habits">, xpReward: number) => {
-    const wasCompleted = completedIds.has(habitId);
-
-    // Show XP popup for newly completed habits
-    if (!wasCompleted) {
-      setRecentlyCompleted((prev) => new Set(prev).add(habitId));
-      setTimeout(() => {
-        setRecentlyCompleted((prev) => {
-          const next = new Set(prev);
-          next.delete(habitId);
-          return next;
-        });
-      }, 800);
-    }
-
-    const result = await toggleHabit({ habitId, date: today });
-    onHabitToggle?.(result.completed, result.xpChange);
-
-    // Check streak after completion
-    if (result.completed) {
-      await checkStreak({ date: today });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [toggleHabit, checkStreak, today, onHabitToggle]);
 
   return (
     <div className="space-y-6">
@@ -161,7 +160,7 @@ export function DailyChecklist({ onAllCompleted, onHabitToggle }: DailyChecklist
                     <motion.button
                       key={habit._id}
                       layout
-                      onClick={() => handleToggle(habit._id, habit.xpReward)}
+                      onClick={() => handleToggle(habit._id)}
                       className={cn(
                         "relative w-full flex items-center gap-3 rounded-xl px-3 py-3 text-left transition-colors border",
                         isCompleted
