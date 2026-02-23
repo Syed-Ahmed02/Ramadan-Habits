@@ -17,6 +17,7 @@ import {
 import * as LucideIcons from "lucide-react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
+import { ShareCard } from "@/components/social/share-card";
 
 function getIcon(iconName: string): React.ComponentType<LucideProps> | null {
   const icons = LucideIcons as unknown as Record<string, React.ComponentType<LucideProps>>;
@@ -173,6 +174,15 @@ export default function ProfilePage() {
             }
           )}
         </div>
+      </motion.div>
+
+      {/* Share Progress Card */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+      >
+        <ShareCard />
       </motion.div>
     </div>
   );
