@@ -9,6 +9,7 @@
  */
 
 import type * as badges from "../badges.js";
+import type * as challenges from "../challenges.js";
 import type * as friendships from "../friendships.js";
 import type * as habitLogs from "../habitLogs.js";
 import type * as habits from "../habits.js";
@@ -24,6 +25,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   badges: typeof badges;
+  challenges: typeof challenges;
   friendships: typeof friendships;
   habitLogs: typeof habitLogs;
   habits: typeof habits;
