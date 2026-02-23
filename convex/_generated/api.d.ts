@@ -12,6 +12,7 @@ import type * as badges from "../badges.js";
 import type * as friendships from "../friendships.js";
 import type * as habitLogs from "../habitLogs.js";
 import type * as habits from "../habits.js";
+import type * as notifications from "../notifications.js";
 import type * as seed from "../seed.js";
 import type * as users from "../users.js";
 
@@ -26,6 +27,7 @@ declare const fullApi: ApiFromModules<{
   friendships: typeof friendships;
   habitLogs: typeof habitLogs;
   habits: typeof habits;
+  notifications: typeof notifications;
   seed: typeof seed;
   users: typeof users;
 }>;

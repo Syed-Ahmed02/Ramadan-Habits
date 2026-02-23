@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { NotificationBell } from "@/components/social/notification-bell";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -88,6 +89,7 @@ export function Sidebar() {
                   <span>Lvl {user.level}</span>
                 </div>
               </div>
+              <NotificationBell />
             </div>
           )}
           {!user && (

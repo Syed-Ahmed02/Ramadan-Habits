@@ -77,6 +77,22 @@ export const sendFriendRequest = mutation({
       createdAt: Date.now(),
     });
 
+    // Get sender name for notification
+    const senderUser = await ctx.db
+      .query("users")
+      .withIndex("by_clerkId", (q) => q.eq("clerkId", senderId))
+      .unique();
+
+    // Create notification for receiver
+    await ctx.db.insert("notifications", {
+      userId: args.receiverId,
+      type: "friend_request",
+      message: `${senderUser?.name ?? "Someone"} sent you a friend request`,
+      read: false,
+      relatedUserId: senderId,
+      createdAt: Date.now(),
+    });
+
     return { success: true };
   },
 });
@@ -105,6 +121,22 @@ export const acceptFriendRequest = mutation({
     }
 
     await ctx.db.patch(args.friendshipId, { status: "accepted" });
+
+    // Get accepter's name for notification
+    const accepterUser = await ctx.db
+      .query("users")
+      .withIndex("by_clerkId", (q) => q.eq("clerkId", identity.subject))
+      .unique();
+
+    // Notify the sender that their request was accepted
+    await ctx.db.insert("notifications", {
+      userId: friendship.senderId,
+      type: "friend_request",
+      message: `${accepterUser?.name ?? "Someone"} accepted your friend request`,
+      read: false,
+      relatedUserId: identity.subject,
+      createdAt: Date.now(),
+    });
 
     // Check if sender now has 5 friends -> award social_butterfly badge
     const senderFriendships = await ctx.db

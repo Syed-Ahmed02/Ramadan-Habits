@@ -3,6 +3,7 @@
 import { UserButton } from "@clerk/nextjs";
 import { Star } from "lucide-react";
 import Link from "next/link";
+import { NotificationBell } from "@/components/social/notification-bell";
 
 export function MobileHeader() {
   return (
@@ -15,13 +16,16 @@ export function MobileHeader() {
           Ramadan Habits
         </span>
       </Link>
-      <UserButton
-        appearance={{
-          elements: {
-            avatarBox: "h-8 w-8",
-          },
-        }}
-      />
+      <div className="flex items-center gap-2">
+        <NotificationBell />
+        <UserButton
+          appearance={{
+            elements: {
+              avatarBox: "h-8 w-8",
+            },
+          }}
+        />
+      </div>
     </header>
   );
 }
