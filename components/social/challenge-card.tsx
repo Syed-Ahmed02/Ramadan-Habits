@@ -27,6 +27,7 @@ interface ChallengeCardProps {
   participantCount: number;
   isCreator: boolean;
   isParticipant?: boolean;
+  challengeStatus?: string; // "completed" from backend
   index?: number;
   onViewDetails?: (id: Id<"challenges">) => void;
 }
@@ -63,6 +64,7 @@ export function ChallengeCard({
   participantCount,
   isCreator,
   isParticipant = true,
+  challengeStatus,
   index = 0,
   onViewDetails,
 }: ChallengeCardProps) {
@@ -71,7 +73,7 @@ export function ChallengeCard({
   const deleteChallenge = useMutation(api.challenges.deleteChallenge);
   const [loading, setLoading] = useState(false);
 
-  const status = getChallengeStatus(startDate, endDate);
+  const status = challengeStatus === "completed" ? "completed" : getChallengeStatus(startDate, endDate);
   const { elapsed, total } = getDaysProgress(startDate, endDate);
 
   const handleJoin = async () => {

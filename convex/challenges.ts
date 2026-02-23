@@ -372,3 +372,94 @@ export const getChallengeDetails = query({
     };
   },
 });
+
+// Complete a challenge - awards bonus XP to all participants
+const CHALLENGE_BONUS_XP = 50;
+
+export const completeChallenge = mutation({
+  args: { challengeId: v.id("challenges") },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+
+    const challenge = await ctx.db.get(args.challengeId);
+    if (!challenge) {
+      throw new Error("Challenge not found");
+    }
+
+    if (challenge.creatorId !== identity.subject) {
+      throw new Error("Only the creator can complete this challenge");
+    }
+
+    if (challenge.status === "completed") {
+      throw new Error("Challenge is already completed");
+    }
+
+    // Mark challenge as completed
+    await ctx.db.patch(args.challengeId, {
+      status: "completed",
+      completedAt: Date.now(),
+    });
+
+    // Award bonus XP to each participant and check for challenge_master badge
+    for (const participantId of challenge.participantIds) {
+      const user = await ctx.db
+        .query("users")
+        .withIndex("by_clerkId", (q) => q.eq("clerkId", participantId))
+        .unique();
+
+      if (user) {
+        // Award bonus XP
+        const newXp = user.xp + CHALLENGE_BONUS_XP;
+        const XP_PER_LEVEL = 100;
+        const discriminant = 1 + (8 * newXp) / XP_PER_LEVEL;
+        const newLevel = Math.min(
+          Math.max(Math.floor((-1 + Math.sqrt(discriminant)) / 2), 1),
+          30
+        );
+        await ctx.db.patch(user._id, { xp: newXp, level: newLevel });
+
+        // Send notification to participant
+        if (participantId !== identity.subject) {
+          await ctx.db.insert("notifications", {
+            userId: participantId,
+            type: "challenge_invite",
+            message: `Challenge "${challenge.title}" completed! You earned ${CHALLENGE_BONUS_XP} bonus XP!`,
+            read: false,
+            relatedUserId: identity.subject,
+            createdAt: Date.now(),
+          });
+        }
+
+        // Check if participant has now completed 3 challenges -> challenge_master badge
+        const allChallenges = await ctx.db.query("challenges").collect();
+        const completedCount = allChallenges.filter(
+          (c) =>
+            c.status === "completed" &&
+            c.participantIds.includes(participantId)
+        ).length;
+
+        if (completedCount >= 3) {
+          const existingBadge = await ctx.db
+            .query("badges")
+            .withIndex("by_userId_badgeType", (q) =>
+              q.eq("userId", participantId).eq("badgeType", "challenge_master")
+            )
+            .unique();
+
+          if (!existingBadge) {
+            await ctx.db.insert("badges", {
+              userId: participantId,
+              badgeType: "challenge_master",
+              earnedAt: Date.now(),
+            });
+          }
+        }
+      }
+    }
+
+    return { success: true, bonusXp: CHALLENGE_BONUS_XP };
+  },
+});

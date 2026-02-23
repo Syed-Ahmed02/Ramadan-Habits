@@ -90,6 +90,7 @@ export default function ChallengesPage() {
                   creatorName={challenge.creatorName}
                   participantCount={challenge.participantCount}
                   isCreator={challenge.isCreator}
+                  challengeStatus={challenge.status}
                   index={i}
                   onViewDetails={setSelectedChallengeId}
                 />
@@ -130,6 +131,7 @@ export default function ChallengesPage() {
                   participantCount={challenge.participantCount}
                   isCreator={false}
                   isParticipant={false}
+                  challengeStatus={challenge.status}
                   index={i}
                   onViewDetails={setSelectedChallengeId}
                 />

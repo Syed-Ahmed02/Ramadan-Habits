@@ -1,13 +1,14 @@
 "use client";
 
-import { useQuery } from "convex/react";
+import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, Calendar, Trophy, Medal, Award } from "lucide-react";
+import { ArrowLeft, Calendar, Trophy, Medal, Award, CheckCircle2, Sparkles } from "lucide-react";
 import { motion } from "motion/react";
+import { useState } from "react";
 import type { Id } from "@/convex/_generated/dataModel";
 
 interface ChallengeDetailsProps {
@@ -26,6 +27,8 @@ function formatDate(dateStr: string): string {
 
 export function ChallengeDetails({ challengeId, onBack }: ChallengeDetailsProps) {
   const details = useQuery(api.challenges.getChallengeDetails, { challengeId });
+  const completeChallenge = useMutation(api.challenges.completeChallenge);
+  const [completing, setCompleting] = useState(false);
 
   if (details === undefined) {
     return (
@@ -90,6 +93,36 @@ export function ChallengeDetails({ challengeId, onBack }: ChallengeDetailsProps)
           {details.habitTitle && <span>Habit: {details.habitTitle}</span>}
           <span>Created by {details.creatorName}</span>
         </div>
+
+        {/* Challenge status / complete button */}
+        {details.status === "completed" ? (
+          <div className="mt-3 flex items-center gap-2 rounded-lg bg-green-500/10 border border-green-500/20 px-3 py-2 text-sm text-green-600 dark:text-green-400">
+            <CheckCircle2 className="h-4 w-4" />
+            <span className="font-medium">Challenge Completed</span>
+            <Sparkles className="h-3 w-3 ml-1" />
+            <span className="text-xs opacity-70">+50 XP awarded</span>
+          </div>
+        ) : details.isCreator ? (
+          <div className="mt-3">
+            <Button
+              size="sm"
+              onClick={async () => {
+                setCompleting(true);
+                try {
+                  await completeChallenge({ challengeId });
+                } catch (err) {
+                  console.error("Failed to complete challenge:", err);
+                } finally {
+                  setCompleting(false);
+                }
+              }}
+              disabled={completing}
+            >
+              <Trophy className="h-4 w-4 mr-1" />
+              {completing ? "Completing..." : "Complete Challenge & Award XP"}
+            </Button>
+          </div>
+        ) : null}
       </motion.div>
 
       <motion.div
