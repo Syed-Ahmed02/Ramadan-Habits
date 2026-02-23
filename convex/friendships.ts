@@ -437,3 +437,115 @@ export const getFriendshipStatus = query({
     return null;
   },
 });
+
+// Get leaderboard data - friends + current user ranked by XP
+// filter: "all" | "daily" | "weekly"
+export const getLeaderboard = query({
+  args: { filter: v.string() },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return [];
+
+    const userId = identity.subject;
+
+    // Get all friend clerkIds
+    const sentFriendships = await ctx.db
+      .query("friendships")
+      .withIndex("by_senderId", (q) => q.eq("senderId", userId))
+      .filter((q) => q.eq(q.field("status"), "accepted"))
+      .collect();
+
+    const receivedFriendships = await ctx.db
+      .query("friendships")
+      .withIndex("by_receiverId", (q) => q.eq("receiverId", userId))
+      .filter((q) => q.eq(q.field("status"), "accepted"))
+      .collect();
+
+    const friendClerkIds = [
+      ...sentFriendships.map((f) => f.receiverId),
+      ...receivedFriendships.map((f) => f.senderId),
+    ];
+
+    // Include current user
+    const allClerkIds = [userId, ...friendClerkIds];
+
+    // Get user records
+    const users = await Promise.all(
+      allClerkIds.map(async (clerkId) => {
+        return await ctx.db
+          .query("users")
+          .withIndex("by_clerkId", (q) => q.eq("clerkId", clerkId))
+          .unique();
+      })
+    );
+
+    const validUsers = users.filter(Boolean);
+
+    if (args.filter === "all") {
+      // Rank by total XP
+      const ranked = validUsers
+        .map((user) => ({
+          clerkId: user!.clerkId,
+          name: user!.name,
+          username: user!.username,
+          avatarUrl: user!.avatarUrl,
+          level: user!.level,
+          xp: user!.xp,
+          streak: user!.streak,
+          isCurrentUser: user!.clerkId === userId,
+        }))
+        .sort((a, b) => b.xp - a.xp);
+
+      return ranked;
+    }
+
+    // For daily/weekly, calculate XP earned in the time period from habit logs
+    const now = new Date();
+    let startDate: string;
+
+    if (args.filter === "daily") {
+      startDate = now.toISOString().split("T")[0];
+    } else {
+      // weekly - 7 days ago
+      const weekAgo = new Date(now);
+      weekAgo.setDate(weekAgo.getDate() - 6);
+      startDate = weekAgo.toISOString().split("T")[0];
+    }
+
+    const ranked = await Promise.all(
+      validUsers.map(async (user) => {
+        // Get completed habit logs for the period
+        const logs = await ctx.db
+          .query("habitLogs")
+          .withIndex("by_userId", (q) => q.eq("userId", user!.clerkId))
+          .filter((q) =>
+            q.and(
+              q.eq(q.field("completed"), true),
+              q.gte(q.field("date"), startDate)
+            )
+          )
+          .collect();
+
+        // Sum up XP from completed habits
+        let periodXp = 0;
+        for (const log of logs) {
+          const habit = await ctx.db.get(log.habitId);
+          if (habit) periodXp += habit.xpReward;
+        }
+
+        return {
+          clerkId: user!.clerkId,
+          name: user!.name,
+          username: user!.username,
+          avatarUrl: user!.avatarUrl,
+          level: user!.level,
+          xp: periodXp,
+          streak: user!.streak,
+          isCurrentUser: user!.clerkId === userId,
+        };
+      })
+    );
+
+    return ranked.sort((a, b) => b.xp - a.xp);
+  },
+});

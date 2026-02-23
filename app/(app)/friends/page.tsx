@@ -1,13 +1,14 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Users, UserPlus, Inbox } from "lucide-react";
+import { Users, UserPlus, Inbox, Trophy } from "lucide-react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserSearch } from "@/components/social/user-search";
 import { FriendCard } from "@/components/social/friend-card";
 import { FriendRequestCard } from "@/components/social/friend-request-card";
+import { Leaderboard } from "@/components/social/leaderboard";
 
 export default function FriendsPage() {
   const friends = useQuery(api.friendships.getFriends);
@@ -38,6 +39,10 @@ export default function FriendsPage() {
             <TabsTrigger value="friends">
               <Users className="h-4 w-4 mr-1.5" />
               Friends{friends ? ` (${friends.length})` : ""}
+            </TabsTrigger>
+            <TabsTrigger value="leaderboard">
+              <Trophy className="h-4 w-4 mr-1.5" />
+              Leaderboard
             </TabsTrigger>
             <TabsTrigger value="requests">
               <Inbox className="h-4 w-4 mr-1.5" />
@@ -85,6 +90,10 @@ export default function FriendsPage() {
                 ) : null
               )}
             </div>
+          </TabsContent>
+
+          <TabsContent value="leaderboard">
+            <Leaderboard />
           </TabsContent>
 
           <TabsContent value="requests">
