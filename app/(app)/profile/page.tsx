@@ -12,15 +12,14 @@ import {
   Trophy,
   Target,
   Calendar,
+  LucideProps,
 } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getIcon(iconName: string): React.ComponentType<any> | null {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const icons = LucideIcons as unknown as Record<string, React.ComponentType<any>>;
+function getIcon(iconName: string): React.ComponentType<LucideProps> | null {
+  const icons = LucideIcons as unknown as Record<string, React.ComponentType<LucideProps>>;
   return icons[iconName] || null;
 }
 

@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "motion/react";
 import * as LucideIcons from "lucide-react";
+import { type LucideProps } from "lucide-react";
 import { BADGE_DEFINITIONS, type BadgeType } from "@/lib/constants";
 import { useEffect } from "react";
 
@@ -12,10 +13,8 @@ interface BadgeEarnedProps {
   onDismiss: () => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getIcon(iconName: string): React.ComponentType<any> | null {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const icons = LucideIcons as unknown as Record<string, React.ComponentType<any>>;
+function getIcon(iconName: string): React.ComponentType<LucideProps> | null {
+  const icons = LucideIcons as unknown as Record<string, React.ComponentType<LucideProps>>;
   return icons[iconName] || null;
 }
 

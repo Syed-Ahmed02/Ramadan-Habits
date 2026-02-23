@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2, type LucideProps } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { Id } from "@/convex/_generated/dataModel";
@@ -61,11 +61,9 @@ const ICON_OPTIONS = [
   { value: "Zap", label: "Zap" },
 ] as const;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getIcon(iconName: string | undefined): React.ComponentType<any> | null {
+function getIcon(iconName: string | undefined): React.ComponentType<LucideProps> | null {
   if (!iconName) return null;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const icons = LucideIcons as unknown as Record<string, React.ComponentType<any>>;
+  const icons = LucideIcons as unknown as Record<string, React.ComponentType<LucideProps>>;
   return icons[iconName] || null;
 }
 

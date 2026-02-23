@@ -6,17 +6,15 @@ import { Id } from "@/convex/_generated/dataModel";
 import { getTodayDateString } from "@/lib/gamification";
 import { CATEGORY_INFO, type HabitCategory } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { Check } from "lucide-react";
+import { Check, type LucideProps } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useState, useCallback, useRef } from "react";
 import { InlineXpPopup } from "@/components/animations/xp-popup";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getIcon(iconName: string | undefined): React.ComponentType<any> | null {
+function getIcon(iconName: string | undefined): React.ComponentType<LucideProps> | null {
   if (!iconName) return null;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const icons = LucideIcons as unknown as Record<string, React.ComponentType<any>>;
+  const icons = LucideIcons as unknown as Record<string, React.ComponentType<LucideProps>>;
   return icons[iconName] || null;
 }
 
@@ -63,7 +61,6 @@ export function DailyChecklist({ onAllCompleted, onHabitToggle }: DailyChecklist
     if (result.completed) {
       await checkStreak({ date: today });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toggleHabit, checkStreak, today, onHabitToggle, logs]);
 
   if (!habits || !logs) {
