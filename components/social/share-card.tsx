@@ -26,6 +26,7 @@ export function ShareCard() {
         quality: 1,
         pixelRatio: 2,
         cacheBust: true,
+        fontEmbedCSS: "",
       });
       const link = document.createElement("a");
       link.download = `ramadan-progress-${getTodayDateString()}.png`;
@@ -45,6 +46,7 @@ export function ShareCard() {
         quality: 1,
         pixelRatio: 2,
         cacheBust: true,
+        fontEmbedCSS: "",
       });
       const blob = await (await fetch(dataUrl)).blob();
       const file = new File([blob], "ramadan-progress.png", {
