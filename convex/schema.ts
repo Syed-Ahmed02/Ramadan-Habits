@@ -62,6 +62,8 @@ export default defineSchema({
     startDate: v.string(),
     endDate: v.string(),
     participantIds: v.array(v.string()),
+    status: v.optional(v.string()), // "active" | "completed"
+    completedAt: v.optional(v.number()),
     createdAt: v.number(),
   })
     .index("by_creatorId", ["creatorId"]),
