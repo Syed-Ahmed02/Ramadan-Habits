@@ -8,6 +8,7 @@ import { api } from "@/convex/_generated/api";
 import { Sidebar } from "@/components/layout/sidebar";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { MobileHeader } from "@/components/layout/mobile-header";
+import { ErrorBoundary } from "@/components/error/error-boundary";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { isLoaded, isSignedIn } = useAuth();
@@ -40,7 +41,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <MobileHeader />
       <main className="lg:pl-64">
         <div className="mx-auto max-w-5xl px-4 py-6 pb-[calc(6rem+env(safe-area-inset-bottom))] lg:px-8 lg:py-8 lg:pb-8">
-          {children}
+          <ErrorBoundary>{children}</ErrorBoundary>
         </div>
       </main>
       <MobileNav />
