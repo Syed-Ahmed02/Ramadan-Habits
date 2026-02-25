@@ -2,10 +2,11 @@
 
 import { motion } from "motion/react";
 import { RamadanCalendar } from "@/components/progress/ramadan-calendar";
+import { ProgressCharts } from "@/components/progress/progress-charts";
 
 export default function ProgressPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -24,6 +25,16 @@ export default function ProgressPage() {
       >
         <h2 className="text-lg font-semibold">30-Day Calendar</h2>
         <RamadanCalendar />
+      </motion.section>
+
+      <motion.section
+        className="space-y-4"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15 }}
+      >
+        <h2 className="text-lg font-semibold">Charts & Statistics</h2>
+        <ProgressCharts />
       </motion.section>
     </div>
   );
