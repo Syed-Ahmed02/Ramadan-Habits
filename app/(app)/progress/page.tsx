@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { BarChart3 } from "lucide-react";
+import { RamadanCalendar } from "@/components/progress/ramadan-calendar";
 
 export default function ProgressPage() {
   return (
@@ -16,22 +16,15 @@ export default function ProgressPage() {
         </p>
       </motion.div>
 
-      <motion.div
-        className="flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-border p-12 text-center"
+      <motion.section
+        className="space-y-4"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
       >
-        <div className="flex items-center justify-center w-12 h-12 rounded-full bg-muted">
-          <BarChart3 className="h-6 w-6 text-muted-foreground" />
-        </div>
-        <div>
-          <h3 className="text-base font-medium">Coming Soon</h3>
-          <p className="text-sm text-muted-foreground mt-1">
-            30-day calendar view, charts, and detailed statistics will be available here.
-          </p>
-        </div>
-      </motion.div>
+        <h2 className="text-lg font-semibold">30-Day Calendar</h2>
+        <RamadanCalendar />
+      </motion.section>
     </div>
   );
 }
