@@ -9,6 +9,7 @@ import { UserSearch } from "@/components/social/user-search";
 import { FriendCard } from "@/components/social/friend-card";
 import { FriendRequestCard } from "@/components/social/friend-request-card";
 import { Leaderboard } from "@/components/social/leaderboard";
+import { FriendsListSkeleton } from "@/components/loading/page-skeletons";
 
 export default function FriendsPage() {
   const friends = useQuery(api.friendships.getFriends);
@@ -56,11 +57,7 @@ export default function FriendsPage() {
 
           <TabsContent value="friends">
             <div className="space-y-2">
-              {friends === undefined && (
-                <div className="text-sm text-muted-foreground text-center py-8">
-                  Loading...
-                </div>
-              )}
+              {friends === undefined && <FriendsListSkeleton />}
               {friends && friends.length === 0 && (
                 <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border p-8 text-center">
                   <div className="flex items-center justify-center w-10 h-10 rounded-full bg-muted">
@@ -74,7 +71,7 @@ export default function FriendsPage() {
                   </div>
                 </div>
               )}
-              {friends?.map((friend, i) =>
+              {friends && friends.map((friend, i) =>
                 friend ? (
                   <FriendCard
                     key={friend.friendshipId}

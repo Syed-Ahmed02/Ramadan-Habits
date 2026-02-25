@@ -22,7 +22,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   if (!isLoaded) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-12 w-12 rounded-xl bg-muted animate-pulse" />
+          <div className="h-4 w-24 rounded bg-muted animate-pulse" />
+        </div>
       </div>
     );
   }

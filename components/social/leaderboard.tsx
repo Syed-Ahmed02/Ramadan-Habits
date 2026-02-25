@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Trophy, Medal, Award, Flame } from "lucide-react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type LeaderboardFilter = "all" | "daily" | "weekly";
 
@@ -71,8 +72,10 @@ export function Leaderboard() {
       <CardContent>
         <div className="space-y-2">
           {leaderboard === undefined && (
-            <div className="text-sm text-muted-foreground text-center py-6">
-              Loading...
+            <div className="space-y-2">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Skeleton key={i} className="h-14 rounded-lg" />
+              ))}
             </div>
           )}
           {leaderboard && leaderboard.length === 0 && (

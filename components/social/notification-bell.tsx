@@ -100,8 +100,10 @@ export function NotificationBell() {
               {/* Notifications list */}
               <ScrollArea className="max-h-80">
                 {notifications === undefined && (
-                  <div className="p-4 text-sm text-muted-foreground text-center">
-                    Loading...
+                  <div className="space-y-2 p-4">
+                    {Array.from({ length: 3 }).map((_, i) => (
+                      <div key={i} className="h-14 rounded-lg bg-muted animate-pulse" />
+                    ))}
                   </div>
                 )}
                 {notifications && notifications.length === 0 && (
