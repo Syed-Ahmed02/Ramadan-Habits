@@ -1,16 +1,24 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { motion } from "motion/react";
 import { Swords, Globe } from "lucide-react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChallengeCard } from "@/components/social/challenge-card";
-import { CreateChallengeDialog } from "@/components/social/create-challenge-dialog";
-import { ChallengeDetails } from "@/components/social/challenge-details";
 import { ChallengeListSkeleton } from "@/components/loading/page-skeletons";
 import type { Id } from "@/convex/_generated/dataModel";
+
+const CreateChallengeDialog = dynamic(
+  () => import("@/components/social/create-challenge-dialog").then((m) => ({ default: m.CreateChallengeDialog })),
+  { ssr: false }
+);
+const ChallengeDetails = dynamic(
+  () => import("@/components/social/challenge-details").then((m) => ({ default: m.ChallengeDetails })),
+  { ssr: false, loading: () => <div className="h-64 rounded-xl bg-muted animate-pulse" /> }
+);
 
 export default function ChallengesPage() {
   const myChallenges = useQuery(api.challenges.getMyChallenges);

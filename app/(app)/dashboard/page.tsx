@@ -1,14 +1,25 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { DailyChecklist } from "@/components/dashboard/daily-checklist";
 import { XpBar } from "@/components/dashboard/xp-bar";
 import { StreakCounter } from "@/components/dashboard/streak-counter";
 import { DailyProgress } from "@/components/dashboard/daily-progress";
 import { MosqueBuilder } from "@/components/dashboard/mosque-builder";
-import { ConfettiCelebration } from "@/components/animations/confetti";
-import { LevelUpOverlay } from "@/components/animations/level-up";
-import { BadgeEarned } from "@/components/animations/badge-earned";
 import { motion } from "motion/react";
+
+const ConfettiCelebration = dynamic(
+  () => import("@/components/animations/confetti").then((m) => ({ default: m.ConfettiCelebration })),
+  { ssr: false }
+);
+const LevelUpOverlay = dynamic(
+  () => import("@/components/animations/level-up").then((m) => ({ default: m.LevelUpOverlay })),
+  { ssr: false }
+);
+const BadgeEarned = dynamic(
+  () => import("@/components/animations/badge-earned").then((m) => ({ default: m.BadgeEarned })),
+  { ssr: false }
+);
 import { useState, useCallback } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";

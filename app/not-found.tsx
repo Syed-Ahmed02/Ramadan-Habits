@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Home, SearchX } from "lucide-react";
 
 export default function NotFound() {
@@ -14,12 +13,13 @@ export default function NotFound() {
           The page you&apos;re looking for doesn&apos;t exist or has been moved.
         </p>
       </div>
-      <Button asChild>
-        <Link href="/" className="flex items-center gap-2">
-          <Home className="h-4 w-4" />
-          Back to Home
-        </Link>
-      </Button>
+      <Link
+        href="/"
+        className="inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-2 font-medium text-primary-foreground hover:bg-primary/90"
+      >
+        <Home className="h-4 w-4" />
+        Back to Home
+      </Link>
     </div>
   );
 }

@@ -1,8 +1,13 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { motion } from "motion/react";
 import { RamadanCalendar } from "@/components/progress/ramadan-calendar";
-import { ProgressCharts } from "@/components/progress/progress-charts";
+
+const ProgressCharts = dynamic(
+  () => import("@/components/progress/progress-charts").then((m) => ({ default: m.ProgressCharts })),
+  { ssr: false, loading: () => <div className="h-64 rounded-xl bg-muted animate-pulse" /> }
+);
 
 export default function ProgressPage() {
   return (
