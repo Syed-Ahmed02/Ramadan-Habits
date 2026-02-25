@@ -1,15 +1,24 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { motion } from "motion/react";
 import { Swords, Globe } from "lucide-react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChallengeCard } from "@/components/social/challenge-card";
-import { CreateChallengeDialog } from "@/components/social/create-challenge-dialog";
-import { ChallengeDetails } from "@/components/social/challenge-details";
+import { ChallengeListSkeleton } from "@/components/loading/page-skeletons";
 import type { Id } from "@/convex/_generated/dataModel";
+
+const CreateChallengeDialog = dynamic(
+  () => import("@/components/social/create-challenge-dialog").then((m) => ({ default: m.CreateChallengeDialog })),
+  { ssr: false }
+);
+const ChallengeDetails = dynamic(
+  () => import("@/components/social/challenge-details").then((m) => ({ default: m.ChallengeDetails })),
+  { ssr: false, loading: () => <div className="h-64 rounded-xl bg-muted animate-pulse" /> }
+);
 
 export default function ChallengesPage() {
   const myChallenges = useQuery(api.challenges.getMyChallenges);
@@ -100,11 +109,7 @@ export default function ChallengesPage() {
 
           <TabsContent value="discover">
             <div className="space-y-2">
-              {availableChallenges === undefined && (
-                <div className="text-sm text-muted-foreground text-center py-8">
-                  Loading...
-                </div>
-              )}
+              {availableChallenges === undefined && <ChallengeListSkeleton />}
               {availableChallenges && availableChallenges.length === 0 && (
                 <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border p-8 text-center">
                   <div className="flex items-center justify-center w-10 h-10 rounded-full bg-muted">

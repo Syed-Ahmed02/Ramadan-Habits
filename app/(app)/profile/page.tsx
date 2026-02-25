@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { getLevelProgress, formatXp } from "@/lib/gamification";
@@ -17,7 +18,11 @@ import {
 import * as LucideIcons from "lucide-react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
-import { ShareCard } from "@/components/social/share-card";
+
+const ShareCard = dynamic(
+  () => import("@/components/social/share-card").then((m) => ({ default: m.ShareCard })),
+  { ssr: false, loading: () => <div className="h-48 rounded-xl bg-muted animate-pulse" /> }
+);
 
 function getIcon(iconName: string): React.ComponentType<LucideProps> | null {
   const icons = LucideIcons as unknown as Record<string, React.ComponentType<LucideProps>>;

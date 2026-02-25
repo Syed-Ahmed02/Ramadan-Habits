@@ -69,8 +69,10 @@ export function ShareCard() {
   if (!user) {
     return (
       <Card>
-        <CardContent className="py-8 text-center text-sm text-muted-foreground">
-          Loading...
+        <CardContent className="py-8 space-y-4">
+          <div className="h-6 w-40 rounded bg-muted animate-pulse mx-auto" />
+          <div className="h-48 rounded-2xl bg-muted animate-pulse max-w-[400px] mx-auto" />
+          <div className="h-10 w-full rounded-lg bg-muted animate-pulse" />
         </CardContent>
       </Card>
     );

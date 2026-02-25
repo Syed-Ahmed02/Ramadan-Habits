@@ -121,6 +121,9 @@ export const BADGE_DEFINITIONS = {
 
 export type BadgeType = keyof typeof BADGE_DEFINITIONS;
 
+// Ramadan 2026 start date (configurable for other years)
+export const RAMADAN_START_DATE = "2026-02-17";
+
 // Default habits seed data
 export const DEFAULT_HABITS = [
   // Prayer (xp: 15-25)

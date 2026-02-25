@@ -37,8 +37,14 @@ export function ChallengeDetails({ challengeId, onBack }: ChallengeDetailsProps)
           <ArrowLeft className="h-4 w-4 mr-1" />
           Back
         </Button>
-        <div className="text-sm text-muted-foreground text-center py-8">
-          Loading...
+        <div className="space-y-4">
+          <div className="h-8 w-full rounded-lg bg-muted animate-pulse" />
+          <div className="h-24 rounded-xl bg-muted animate-pulse" />
+          <div className="space-y-2">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="h-14 rounded-lg bg-muted animate-pulse" />
+            ))}
+          </div>
         </div>
       </div>
     );

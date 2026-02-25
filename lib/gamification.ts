@@ -98,6 +98,27 @@ export function getRamadanDay(startDate: string): number | null {
 }
 
 /**
+ * Get the ISO date string for a given Ramadan day (1-30).
+ */
+export function getDateForRamadanDay(
+  ramadanDay: number,
+  startDate: string
+): string {
+  const start = new Date(startDate + "T12:00:00");
+  start.setDate(start.getDate() + ramadanDay - 1);
+  return start.toISOString().split("T")[0];
+}
+
+/**
+ * Get all 30 Ramadan day date strings.
+ */
+export function getRamadanDateRange(startDate: string): string[] {
+  return Array.from({ length: 30 }, (_, i) =>
+    getDateForRamadanDay(i + 1, startDate)
+  );
+}
+
+/**
  * Calculate completion percentage for a day.
  */
 export function getDailyCompletionPercentage(
