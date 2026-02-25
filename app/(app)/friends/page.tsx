@@ -35,7 +35,7 @@ export default function FriendsPage() {
         transition={{ delay: 0.05 }}
       >
         <Tabs defaultValue="friends">
-          <TabsList>
+          <TabsList className="w-full overflow-x-auto flex-nowrap justify-start md:justify-center md:overflow-visible pb-1 -mb-1">
             <TabsTrigger value="friends">
               <Users className="h-4 w-4 mr-1.5" />
               Friends{friends ? ` (${friends.length})` : ""}

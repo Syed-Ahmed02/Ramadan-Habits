@@ -193,7 +193,7 @@ export function ProgressCharts() {
                   outerRadius={65}
                   paddingAngle={2}
                   label={({ name, percent }) =>
-                    `${name} ${(percent * 100).toFixed(0)}%`
+                    percent >= 0.08 ? `${name} ${(percent * 100).toFixed(0)}%` : ""
                   }
                 >
                   {categoryData.map((_, index) => (

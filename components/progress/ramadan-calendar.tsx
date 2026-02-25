@@ -110,8 +110,9 @@ export function RamadanCalendar() {
                 )
               }
               disabled={isEmpty}
+              aria-label={`Ramadan Day ${day.ramadanDay}, ${day.percentage}% complete`}
               className={cn(
-                "aspect-square rounded-lg flex flex-col items-center justify-center gap-0.5 text-xs transition-all",
+                "aspect-square min-w-[36px] min-h-[36px] rounded-lg flex flex-col items-center justify-center gap-0.5 text-xs transition-all touch-manipulation",
                 "border-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
                 isSelected && "ring-2 ring-primary ring-offset-2",
                 isToday && "border-primary shadow-md",

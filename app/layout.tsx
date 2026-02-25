@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, Lora } from "next/font/google";
 import "./globals.css";
 import {
@@ -27,6 +27,13 @@ export const metadata: Metadata = {
   title: "Ramadan Habits - Track Your Good Deeds This Ramadan",
   description:
     "A gamified Ramadan productivity app. Track daily good deeds, earn XP, build streaks, compete with friends, and grow spiritually throughout the blessed month.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
 };
 
 
