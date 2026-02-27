@@ -10,6 +10,7 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import ConvexClientProvider from "@/components/ClerkClientProvider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-sans",
@@ -92,7 +93,7 @@ export default function RootLayout({
         <body
           className={`${plusJakartaSans.variable} ${lora.variable} font-sans antialiased`}
         >
-          {children}
+          <TooltipProvider>{children}</TooltipProvider>
         </body>
       </html>
       </ConvexClientProvider>

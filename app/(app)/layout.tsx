@@ -5,7 +5,8 @@ import { useAuth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { Sidebar } from "@/components/layout/sidebar";
+import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/layout/sidebar";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { MobileHeader } from "@/components/layout/mobile-header";
 import { ErrorBoundary } from "@/components/error/error-boundary";
@@ -36,15 +37,22 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <Sidebar />
-      <MobileHeader />
-      <main className="lg:pl-64">
-        <div className="mx-auto max-w-5xl px-4 py-6 pb-[calc(6rem+env(safe-area-inset-bottom))] lg:px-8 lg:py-8 lg:pb-8">
-          <ErrorBoundary>{children}</ErrorBoundary>
-        </div>
-      </main>
-      <MobileNav />
-    </div>
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <header className="flex h-14 shrink-0 items-center gap-2 border-b border-border px-4 lg:px-8">
+          <SidebarTrigger className="-ml-1" />
+          <div className="flex-1 min-w-0 lg:hidden">
+            <MobileHeader />
+          </div>
+        </header>
+        <main className="flex-1">
+          <div className="mx-auto max-w-5xl px-4 py-6 pb-[calc(6rem+env(safe-area-inset-bottom))] lg:px-8 lg:py-8 lg:pb-8">
+            <ErrorBoundary>{children}</ErrorBoundary>
+          </div>
+        </main>
+        <MobileNav />
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
