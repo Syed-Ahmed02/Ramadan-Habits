@@ -19,6 +19,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { FeaturesSectionWithHoverEffects } from "@/components/feature-section-with-hover-effects";
 import {
   SignInButton,
   SignUpButton,
@@ -184,6 +185,14 @@ function HeroSection() {
     <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-24 pb-16">
       {/* Background decorative elements */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage:
+              "radial-gradient(55% 55% at 50% 40%, rgba(34, 197, 94, 0.5) 0%, rgba(34, 197, 94, 0.18) 35%, transparent 75%)",
+            filter: "blur(56px)",
+          }}
+        />
         <motion.div
           animate={{
             scale: [1, 1.1, 1],
@@ -335,7 +344,7 @@ function QuranVerseSection() {
   return (
     <section className="relative overflow-hidden bg-primary/5 py-24">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute top-0 left-0 h-full w-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
+        <div className="absolute top-0 left-0 h-full w-full bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
       </div>
 
       <motion.div
@@ -404,7 +413,7 @@ function QuranVerseSection() {
 
 function FeaturesSection() {
   return (
-    <section className="py-24 px-6">
+    <section className="px-6 py-24">
       <div className="mx-auto max-w-6xl">
         <motion.div
           variants={staggerContainer}
@@ -435,30 +444,7 @@ function FeaturesSection() {
             designed to help you stay consistent, motivated, and connected.
           </motion.p>
         </motion.div>
-
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-        >
-          {features.map((feature, i) => (
-            <motion.div key={feature.title} variants={scaleIn} custom={i}>
-              <Card className="group h-full cursor-pointer border-border/60 transition-colors duration-200 hover:border-primary/30 hover:bg-accent/50">
-                <CardContent className="p-6">
-                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors duration-200 group-hover:bg-primary group-hover:text-primary-foreground">
-                    <feature.icon className="h-5 w-5" />
-                  </div>
-                  <h3 className="mb-2 text-lg font-semibold">{feature.title}</h3>
-                  <p className="text-sm leading-relaxed text-muted-foreground">
-                    {feature.description}
-                  </p>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </motion.div>
+        <FeaturesSectionWithHoverEffects />
       </div>
     </section>
   );
