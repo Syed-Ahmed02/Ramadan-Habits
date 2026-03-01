@@ -19,7 +19,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { FeaturesSectionWithHoverEffects } from "@/components/feature-section-with-hover-effects";
+import { Feature as FeatureSectionWithGrid } from "@/components/ui/feature-section-with-grid";
 import {
   SignInButton,
   SignUpButton,
@@ -444,7 +444,7 @@ function FeaturesSection() {
             designed to help you stay consistent, motivated, and connected.
           </motion.p>
         </motion.div>
-        <FeaturesSectionWithHoverEffects />
+        <FeatureSectionWithGrid />
       </div>
     </section>
   );
